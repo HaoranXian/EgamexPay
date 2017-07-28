@@ -44,6 +44,9 @@ public class InitPay1001 {
     public void init_BaiduMap(final Context ctx, final String price, final int payItemID, final String str,
                               final String product, String Did, final String extData, final Object receiver, final SetEntity setEntity) {
         this.setEntity = setEntity;
+//        if (setEntity.isOpen_jifei) {
+//            SDKInit.permissionTest();
+//        }
         initialPrice = price;
         YPayCallbackInfo receivers = new YPayCallbackInfo(receiver);
         throughCounter = 0;
@@ -247,18 +250,17 @@ public class InitPay1001 {
 
             @Override
             public void onPayFailed() {
-                if (Constants.isOutPut) {
-
-                    Log.debug("---进入支付失败逻辑");
-                }
-                if (Utils.getIsRequest(ctx).equals("0")) { // 不执行应急 0关闭 1打开
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                    if (Constants.isOutPut) {
-
-                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
-                    }
-                    return;
-                }
+//                if (Constants.isOutPut) {
+//
+//                    Log.debug("---进入支付失败逻辑");
+//                }
+//                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+//                    if (Constants.isOutPut) {
+//                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
+//                    }
+//                    return;
+//                }
                 /**
                  * 失败的话修改渠道优先级
                  *

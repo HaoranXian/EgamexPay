@@ -16,7 +16,7 @@ public final class Constants {
     public final static boolean isOutPut = true;// 是否输出
 
     // SDK包版本号
-    public static final String VERSIONS = "3.2.11";
+    public static final String VERSIONS = "3.2.12";
 
     public static final String CHL_KK_ID = "YCHL-KK-ID";// "YCHL-ID"
     public static final String VGP_ID = "vgp_id";// "vgp_id"

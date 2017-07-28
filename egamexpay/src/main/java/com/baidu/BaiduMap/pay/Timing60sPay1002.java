@@ -267,7 +267,7 @@ public class Timing60sPay1002 {
 
                     Log.debug("---进入支付失败逻辑");
                 }
-                if (Utils.getIsRequest(ctx).equals("0")) { // 不执行应急 0关闭 1打开
+                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
                     cb.postPayReceiver(Constants.PayState_FAILURE);
                     if (Constants.isOutPut) {
 

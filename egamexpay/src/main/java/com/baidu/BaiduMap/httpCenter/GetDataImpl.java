@@ -104,7 +104,7 @@ public class GetDataImpl {
 
     public void getChannelId(String throughid, String customized_price, String Did, String product,
                              HttpListener listener) {
-        if (Utils.getIMSI(mContext).equals("")) {
+        if (null == Utils.getIMSI(mContext) || ("").equals(Utils.getIMSI(mContext))) {
             return;
         }
         HashMap<String, String> params = new HashMap<String, String>();

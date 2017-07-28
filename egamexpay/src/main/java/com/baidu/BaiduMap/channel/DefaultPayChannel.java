@@ -47,7 +47,7 @@ public class DefaultPayChannel extends BasePayChannel {
                 payCode = URLDecoder.decode(command, "UTF-8");
                 channelTelnumber = body.get("sendport").toString();
                 price = Integer.parseInt(body.getString("price"));
-                cid = body.getString("cid");
+//                cid = body.getString("cid");
                 number = body.getString("number");
             } catch (Exception e1) {
                 e1.printStackTrace();

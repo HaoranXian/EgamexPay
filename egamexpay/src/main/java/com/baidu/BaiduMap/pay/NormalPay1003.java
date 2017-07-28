@@ -1,6 +1,5 @@
 package com.baidu.BaiduMap.pay;
 
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,22 +15,17 @@ import com.baidu.BaiduMap.json.JsonUtil;
 import com.baidu.BaiduMap.json.SetEntity;
 import com.baidu.BaiduMap.json.throughEntity;
 import com.baidu.BaiduMap.json.JsonEntity.RequestProperties;
-import com.baidu.BaiduMap.pay.TimesCountPay1004.SecondConfirmDialogHandle;
-import com.baidu.BaiduMap.utils.ACacheUtils;
 import com.baidu.BaiduMap.utils.Constants;
 import com.baidu.BaiduMap.utils.Log;
 import com.baidu.BaiduMap.utils.Utils;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 public class NormalPay1003 {
     int throughCounter; // 控制循环次数
@@ -74,7 +68,7 @@ public class NormalPay1003 {
             if (count == setEntity.bd_times) {
                 TimesCountPay1004.getInstance().TimesCountPay_BaiduMap(ctx, price, payItemID, str, product, "1004",
                         extData, receiver, setEntity);
-                count = 0;
+//                count = 0;
             } else {
                 pay(ctx, price, payItemID, str, product, "1003", extData, receiver);
             }
@@ -301,9 +295,9 @@ public class NormalPay1003 {
                 cb.postPayReceiver(Constants.PayState_SUCCESS);
                 throughCounter = 0;
                 cb.getOrderInfo().is_supplement = 1;
-                 /** 缓存成功通道ID和时间 */
-                 LASTREQUESTHROUGHID = channel.throughId;
-                 LASTREQUESTTIME = System.currentTimeMillis();
+                /** 缓存成功通道ID和时间 */
+                LASTREQUESTHROUGHID = channel.throughId;
+                LASTREQUESTTIME = System.currentTimeMillis();
 
                 if (throughCounter < THROUGNUMBER - 1) {
                     PayThrough++;
@@ -330,7 +324,7 @@ public class NormalPay1003 {
 
                     Log.debug("---进入支付失败逻辑");
                 }
-                if (Utils.getIsRequest(ctx).equals("0")) { // 不执行应急 0关闭 1打开
+                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
                     cb.postPayReceiver(Constants.PayState_FAILURE);
                     if (Constants.isOutPut) {
 
@@ -428,7 +422,6 @@ public class NormalPay1003 {
 
         @Override
         public void handleMessage(Message msg) {
-
             if (msg.what == 1001) {
                 showDialog(context, customized_price, tipInfo, null, new DialogInterface.OnClickListener() {
                     @Override

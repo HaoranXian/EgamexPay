@@ -1,6 +1,8 @@
 package com.example.xianh.egamexpay;
 
 import android.app.Activity;
+import android.app.AppOpsManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;

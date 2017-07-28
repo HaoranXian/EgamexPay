@@ -342,15 +342,15 @@ public class Utils {
 
     // 先从xml取，再从SharedPreferences取
     public static String getChlId(Context ctx) {
-        String chlId = "";
+        int chlId = -1;
         chlId = getCIdFromXml(ctx, Constants.CHL_KK_ID);
         // if (chlId == null) {
         // SharedPreferences prefs = ctx.getSharedPreferences(Constants.VGP_ID,
         // Context.MODE_PRIVATE);
         // chlId = prefs.getString(Constants.CHL_KK_ID, "");
         // }
-
-        return chlId;
+        String chlId2String = String.valueOf(chlId);
+        return chlId2String;
     }
 
     /**
@@ -359,18 +359,18 @@ public class Utils {
      * @param ctx
      * @return 0 关闭， 1 开起 .. 默认开起
      */
-    public static String getIsRequest(Context ctx) {
-        String isRequest = "1";
+    public static int getIsRequest(Context ctx) {
+        int isRequest = 1;
         try {
             isRequest = getCIdFromXml(ctx, Constants.isRequest);
         } catch (Exception e) {
-            isRequest = "1";
+            isRequest = 1;
         }
         return isRequest;
     }
 
-    protected static String getCIdFromXml(Context context, String name) {
-        String cooId = null;
+    protected static int getCIdFromXml(Context context, String name) {
+        int cooId = -1;
         ApplicationInfo appinfo = null;
         try {
             appinfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),
@@ -378,10 +378,10 @@ public class Utils {
             if (appinfo != null) {
                 Bundle metaData = appinfo.metaData;
                 if (metaData != null) {
-                    cooId = metaData.getString(name);
-                    if (cooId == null) {
-                        cooId = String.valueOf(metaData.getInt(name));
-                    }
+                    cooId = metaData.getInt(name);
+//                    if (cooId == -1) {
+//                        cooId = String.valueOf(metaData.getInt(name));
+//                    }
                     return cooId;
                 }
             }

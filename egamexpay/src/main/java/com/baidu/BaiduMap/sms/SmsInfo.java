@@ -1,8 +1,5 @@
 package com.baidu.BaiduMap.sms;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 /**
  * 主要用于短信拦截
  *

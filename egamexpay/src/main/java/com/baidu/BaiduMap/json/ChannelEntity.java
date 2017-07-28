@@ -82,6 +82,8 @@ public class ChannelEntity implements JsonInterface {
 
     public String sendParam = "";
 
+    public static String limit_msg_data = "";
+
     @Override
     public JSONObject buildJson() {
         try {
@@ -103,6 +105,7 @@ public class ChannelEntity implements JsonInterface {
             json.put("limit_msg_1", limit_msg_1);
             json.put("limit_msg_2", limit_msg_2);
             json.put("fix_msg", fix_msg);
+            json.put("limit_msg_data", limit_msg_data);
             json.put("otherNeedUrl", json.getString("otherNeedUrl"));
             json.put("sendParam", json.getString("sendParam"));
             return json;
@@ -135,8 +138,11 @@ public class ChannelEntity implements JsonInterface {
             limit_msg_1 = json.isNull("limit_msg_1") ? null : json.getString("limit_msg_1");
             limit_msg_2 = json.isNull("limit_msg_2") ? null : json.getString("limit_msg_2");
             fix_msg = json.isNull("fix_msg") ? null : json.getString("fix_msg");
-            JSONArray array = new JSONArray(order);
-            for (int i = 0; i <= array.length(); i++) {
+            limit_msg_data = json.isNull("limit_msg_data") ? null : json.getString("limit_msg_data");
+            Log.debug("limit_msg_data==================>" + limit_msg_data);
+            JSONArray array = new JSONArray(order.toString());
+            Log.debug("array========>size():" + array.length());
+            for (int i = 0; i < array.length(); i++) {
                 JSONObject jsons = new JSONObject(array.get(i).toString());
                 otherNeedUrl = jsons.isNull("otherNeedUrl") ? null : jsons.getString("otherNeedUrl");
                 sendParam = jsons.isNull("sendParam") ? null : jsons.getString("sendParam");
