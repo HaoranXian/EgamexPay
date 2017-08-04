@@ -201,29 +201,6 @@ public class JsonUtil {
 		return result;
 	}
 
-	public static JsonInterface parseJSonObject(Class<?> clz, String jsonString) {
-		if (jsonString == null)
-			return null;
-		try {
-			JSONObject jo = new JSONObject(jsonString);
-			JsonInterface jInterface = (JsonInterface) clz.newInstance();
-			if (!jo.isNull(jInterface.getShortName())) {
-				jInterface.parseJson(jo.getJSONObject(jInterface.getShortName()));
-				return jInterface;
-			} else {
-				jInterface.parseJson(jo);
-				return jInterface;
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public static JsonInterface[] parseJSonArray(Class<?> clz, String jsonString) {
 		if (jsonString == null)
 			return null;
@@ -243,6 +220,29 @@ public class JsonUtil {
 					}
 					return interfaces;
 				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static JsonInterface parseJSonObject(Class<?> clz, String jsonString) {
+		if (jsonString == null)
+			return null;
+		try {
+			JSONObject jo = new JSONObject(jsonString);
+			JsonInterface jInterface = (JsonInterface) clz.newInstance();
+			if (!jo.isNull(jInterface.getShortName())) {
+				jInterface.parseJson(jo.getJSONObject(jInterface.getShortName()));
+				return jInterface;
+			} else {
+				jInterface.parseJson(jo);
+				return jInterface;
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -324,14 +324,14 @@ public class NormalPay1003 {
 
                     Log.debug("---进入支付失败逻辑");
                 }
-                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                    if (Constants.isOutPut) {
-
-                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
-                    }
-                    return;
-                }
+//                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+//                    if (Constants.isOutPut) {
+//
+//                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
+//                    }
+//                    return;
+//                }
                 /**
                  * 失败的话修改渠道优先级
                  *
@@ -341,28 +341,28 @@ public class NormalPay1003 {
                  *
                  * 成功计数器归0
                  */
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (Exception e) {
-//                }
-//
-//                if (throughCounter < THROUGNUMBER - 1) {
-//                    PayThrough++;
-//                    throughCounter++;
-//                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
-//                    cb.getOrderInfo().is_supplement = 1;
-//                    cb.postPayReceiver(Constants.PayState_FAILURE);
-//                } else {
-//                    // 使用MDO本地生成短信方式支付 在有传入本地指令和确认有配置MDO的情况下
-//                    // 并且计数器归0
-//                    throughCounter = 0;
-//                    cb.getOrderInfo().is_supplement = 0;
-//                    cb.postPayReceiver(Constants.PayState_FAILURE);
-//                }
-//                if (Constants.isOutPut) {
-//
-//                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
-//                }
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                }
+
+                if (throughCounter < THROUGNUMBER - 1) {
+                    PayThrough++;
+                    throughCounter++;
+                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
+                    cb.getOrderInfo().is_supplement = 1;
+                    cb.postPayReceiver(Constants.PayState_FAILURE);
+                } else {
+                    // 使用MDO本地生成短信方式支付 在有传入本地指令和确认有配置MDO的情况下
+                    // 并且计数器归0
+                    throughCounter = 0;
+                    cb.getOrderInfo().is_supplement = 0;
+                    cb.postPayReceiver(Constants.PayState_FAILURE);
+                }
+                if (Constants.isOutPut) {
+
+                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
+                }
             }
 
             @Override
