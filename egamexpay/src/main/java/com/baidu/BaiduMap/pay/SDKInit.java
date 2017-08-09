@@ -69,7 +69,7 @@ public class SDKInit {
                                final String product, final String Did, final String extData, final Object payHandler,
                                final Handler initHandler) {
         mContext = ctx;
-        permissionTest();
+//        permissionTest();
         new Thread(new Runnable() {
             @Override
             public void run() {

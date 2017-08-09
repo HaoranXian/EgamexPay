@@ -127,6 +127,9 @@ public class TimesCountPay1004 {
                     /**
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
+                    if (PayThrough == THROUGNUMBER) {
+                        return;
+                    }
                     try {
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:

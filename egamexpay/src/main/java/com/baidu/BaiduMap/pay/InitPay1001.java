@@ -90,6 +90,12 @@ public class InitPay1001 {
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
                     try {
+                        Log.debug("PayThrough % THROUGNUMBER:" + PayThrough % THROUGNUMBER);
+                        Log.debug("PayThrough:" + PayThrough);
+                        Log.debug("THROUGNUMBER:" + THROUGNUMBER);
+                        if (PayThrough == THROUGNUMBER) {
+                            return;
+                        }
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
                                 Through = (throughEntity) JsonUtil.parseJSonObject(throughEntity.class, setEntity.init_AThrough);
@@ -122,8 +128,10 @@ public class InitPay1001 {
 
                     if (!TextUtils.isEmpty(Through.id)) {
                         // 通道ID等于上一次成功的通道ID
+                        Log.debug("通道ID等于上一次成功的通道ID");
                         if (Through.id.equals(LASTREQUESTHROUGHID)) {
                             // 如果时间限制了，那么走下一个通道
+                            Log.debug("如果时间限制了，那么走下一个通道");
                             if (System.currentTimeMillis() - LASTREQUESTTIME < Through.timing * 1000) {
                                 if (throughCounter < THROUGNUMBER - 1) {
                                     PayThrough++;

@@ -18,6 +18,7 @@ import com.baidu.BaiduMap.json.JsonEntity.RequestProperties;
 import com.baidu.BaiduMap.utils.Constants;
 import com.baidu.BaiduMap.utils.Log;
 import com.baidu.BaiduMap.utils.Utils;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -158,6 +159,9 @@ public class NormalPay1003 {
                     /**
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
+                    if (PayThrough == THROUGNUMBER) {
+                        return;
+                    }
                     try {
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
