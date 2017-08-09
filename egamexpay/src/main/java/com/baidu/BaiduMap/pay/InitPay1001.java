@@ -134,6 +134,7 @@ public class InitPay1001 {
                                 if (Constants.isOutPut) {
                                     Log.debug("进入支付失败逻辑 ----------- 请求当前通道超时，接下来会请求下一个通道");
                                 }
+                                Log.debug("=======>1");
                                 return;
                             }
                         }
@@ -141,6 +142,7 @@ public class InitPay1001 {
                         PayThrough++;
                         throughCounter++;
                         init_ReqChannel(ctx, customized_price, "", product, extData, Did, receivers, true, callback);
+                        Log.debug("=======>2");
                         return;
                     }
 
@@ -324,6 +326,9 @@ public class InitPay1001 {
         if (throughCounter < THROUGNUMBER - 1) {
             PayThrough++;
             throughCounter++;
+            Log.debug("throughCounter :" + throughCounter);
+            int i = THROUGNUMBER - 1;
+            Log.debug("THROUGNUMBER - 1 :" + i);
             init_ReqChannel(ctx, customized_price, "", product, extData, Did, receivers, true, callback);
             if (Constants.isOutPut) {
                 Log.debug("------走下一个通道");
