@@ -1,16 +1,11 @@
 package com.baidu.BaiduMap.sms;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 
@@ -19,8 +14,6 @@ import com.baidu.BaiduMap.pay.SDKInit;
 import com.baidu.BaiduMap.utils.Constants;
 import com.baidu.BaiduMap.utils.Log;
 import com.baidu.BaiduMap.utils.Utils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -15,17 +15,11 @@ import com.baidu.BaiduMap.utils.Log;
 import com.baidu.BaiduMap.utils.Utils;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 public class SDKInit {
