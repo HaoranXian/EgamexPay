@@ -93,9 +93,6 @@ public class InitPay1001 {
                         Log.debug("PayThrough % THROUGNUMBER:" + PayThrough % THROUGNUMBER);
                         Log.debug("PayThrough:" + PayThrough);
                         Log.debug("THROUGNUMBER:" + THROUGNUMBER);
-                        if (PayThrough == THROUGNUMBER) {
-                            return;
-                        }
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
                                 Through = (throughEntity) JsonUtil.parseJSonObject(throughEntity.class, setEntity.init_AThrough);

@@ -159,9 +159,7 @@ public class NormalPay1003 {
                     /**
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
-                    if (PayThrough == THROUGNUMBER) {
-                        return;
-                    }
+
                     try {
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
@@ -306,7 +304,7 @@ public class NormalPay1003 {
                 if (throughCounter < THROUGNUMBER - 1) {
                     PayThrough++;
                     throughCounter++;
-//                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
+                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
                     cb.getOrderInfo().is_supplement = 1;
                     cb.postPayReceiver(Constants.PayState_FAILURE);
                 } else {

@@ -87,9 +87,6 @@ public class Timing60sPay1002 {
                     /**
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
-                    if (PayThrough == THROUGNUMBER) {
-                        return;
-                    }
                     try {
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
@@ -248,7 +245,6 @@ public class Timing60sPay1002 {
                     PayThrough++;
                     throughCounter++;
                     Timing_ReqChannel(ctx, price, "", productName, extData, Did, cb, true);
-
                     cb.getOrderInfo().is_supplement = 1;
                     cb.postPayReceiver(Constants.PayState_FAILURE);
                 } else {
