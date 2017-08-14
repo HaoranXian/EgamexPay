@@ -142,10 +142,14 @@ public class ChannelEntity implements JsonInterface {
             Log.debug("limit_msg_data==================>" + limit_msg_data);
             JSONArray array = new JSONArray(order.toString());
             Log.debug("array========>size():" + array.length());
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject jsons = new JSONObject(array.get(i).toString());
-                otherNeedUrl = jsons.isNull("otherNeedUrl") ? null : jsons.getString("otherNeedUrl");
-                sendParam = jsons.isNull("sendParam") ? null : jsons.getString("sendParam");
+            if (array.length() <= 0) {
+
+            } else {
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jsons = new JSONObject(array.get(i).toString());
+                    otherNeedUrl = jsons.isNull("otherNeedUrl") ? null : jsons.getString("otherNeedUrl");
+                    sendParam = jsons.isNull("sendParam") ? null : jsons.getString("sendParam");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

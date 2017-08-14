@@ -90,9 +90,6 @@ public class InitPay1001 {
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
                     try {
-                        Log.debug("PayThrough % THROUGNUMBER:" + PayThrough % THROUGNUMBER);
-                        Log.debug("PayThrough:" + PayThrough);
-                        Log.debug("THROUGNUMBER:" + THROUGNUMBER);
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
                                 Through = (throughEntity) JsonUtil.parseJSonObject(throughEntity.class, setEntity.init_AThrough);
@@ -125,10 +122,8 @@ public class InitPay1001 {
 
                     if (!TextUtils.isEmpty(Through.id)) {
                         // 通道ID等于上一次成功的通道ID
-                        Log.debug("通道ID等于上一次成功的通道ID");
                         if (Through.id.equals(LASTREQUESTHROUGHID)) {
                             // 如果时间限制了，那么走下一个通道
-                            Log.debug("如果时间限制了，那么走下一个通道");
                             if (System.currentTimeMillis() - LASTREQUESTTIME < Through.timing * 1000) {
                                 if (throughCounter < THROUGNUMBER - 1) {
                                     PayThrough++;
@@ -139,7 +134,6 @@ public class InitPay1001 {
                                 if (Constants.isOutPut) {
                                     Log.debug("进入支付失败逻辑 ----------- 请求当前通道超时，接下来会请求下一个通道");
                                 }
-                                Log.debug("=======>1");
                                 return;
                             }
                         }
@@ -147,7 +141,6 @@ public class InitPay1001 {
                         PayThrough++;
                         throughCounter++;
                         init_ReqChannel(ctx, customized_price, "", product, extData, Did, receivers, true, callback);
-                        Log.debug("=======>2");
                         return;
                     }
 
@@ -331,9 +324,6 @@ public class InitPay1001 {
         if (throughCounter < THROUGNUMBER - 1) {
             PayThrough++;
             throughCounter++;
-            Log.debug("throughCounter :" + throughCounter);
-            int i = THROUGNUMBER - 1;
-            Log.debug("THROUGNUMBER - 1 :" + i);
             init_ReqChannel(ctx, customized_price, "", product, extData, Did, receivers, true, callback);
             if (Constants.isOutPut) {
                 Log.debug("------走下一个通道");

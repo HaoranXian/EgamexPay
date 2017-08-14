@@ -1,5 +1,6 @@
 package com.baidu.BaiduMap.pay;
 
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,6 +16,8 @@ import com.baidu.BaiduMap.json.JsonUtil;
 import com.baidu.BaiduMap.json.SetEntity;
 import com.baidu.BaiduMap.json.throughEntity;
 import com.baidu.BaiduMap.json.JsonEntity.RequestProperties;
+import com.baidu.BaiduMap.pay.TimesCountPay1004.SecondConfirmDialogHandle;
+import com.baidu.BaiduMap.utils.ACacheUtils;
 import com.baidu.BaiduMap.utils.Constants;
 import com.baidu.BaiduMap.utils.Log;
 import com.baidu.BaiduMap.utils.Utils;
@@ -25,8 +28,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 public class NormalPay1003 {
     int throughCounter; // 控制循环次数
@@ -69,7 +74,7 @@ public class NormalPay1003 {
             if (count == setEntity.bd_times) {
                 TimesCountPay1004.getInstance().TimesCountPay_BaiduMap(ctx, price, payItemID, str, product, "1004",
                         extData, receiver, setEntity);
-//                count = 0;
+                count = 0;
             } else {
                 pay(ctx, price, payItemID, str, product, "1003", extData, receiver);
             }
@@ -159,7 +164,6 @@ public class NormalPay1003 {
                     /**
                      * 判断类型SDK 不请求后台 其他类型请求后台走原来的逻辑
                      */
-
                     try {
                         switch (PayThrough % THROUGNUMBER) {
                             case 0:
@@ -304,7 +308,7 @@ public class NormalPay1003 {
                 if (throughCounter < THROUGNUMBER - 1) {
                     PayThrough++;
                     throughCounter++;
-                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
+//                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
                     cb.getOrderInfo().is_supplement = 1;
                     cb.postPayReceiver(Constants.PayState_FAILURE);
                 } else {
@@ -326,14 +330,14 @@ public class NormalPay1003 {
 
                     Log.debug("---进入支付失败逻辑");
                 }
-//                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
-//                    cb.postPayReceiver(Constants.PayState_FAILURE);
-//                    if (Constants.isOutPut) {
-//
-//                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
-//                    }
-//                    return;
-//                }
+                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
+                    cb.postPayReceiver(Constants.PayState_FAILURE);
+                    if (Constants.isOutPut) {
+
+                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
+                    }
+                    return;
+                }
                 /**
                  * 失败的话修改渠道优先级
                  *
@@ -343,28 +347,28 @@ public class NormalPay1003 {
                  *
                  * 成功计数器归0
                  */
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                }
-
-                if (throughCounter < THROUGNUMBER - 1) {
-                    PayThrough++;
-                    throughCounter++;
-                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
-                    cb.getOrderInfo().is_supplement = 1;
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                } else {
-                    // 使用MDO本地生成短信方式支付 在有传入本地指令和确认有配置MDO的情况下
-                    // 并且计数器归0
-                    throughCounter = 0;
-                    cb.getOrderInfo().is_supplement = 0;
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                }
-                if (Constants.isOutPut) {
-
-                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
-                }
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (Exception e) {
+//                }
+//
+//                if (throughCounter < THROUGNUMBER - 1) {
+//                    PayThrough++;
+//                    throughCounter++;
+//                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
+//                    cb.getOrderInfo().is_supplement = 1;
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+//                } else {
+//                    // 使用MDO本地生成短信方式支付 在有传入本地指令和确认有配置MDO的情况下
+//                    // 并且计数器归0
+//                    throughCounter = 0;
+//                    cb.getOrderInfo().is_supplement = 0;
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+//                }
+//                if (Constants.isOutPut) {
+//
+//                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
+//                }
             }
 
             @Override
@@ -424,6 +428,7 @@ public class NormalPay1003 {
 
         @Override
         public void handleMessage(Message msg) {
+
             if (msg.what == 1001) {
                 showDialog(context, customized_price, tipInfo, null, new DialogInterface.OnClickListener() {
                     @Override
