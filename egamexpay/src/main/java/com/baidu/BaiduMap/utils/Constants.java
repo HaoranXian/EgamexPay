@@ -13,7 +13,7 @@ public final class Constants {
     // 海琛服务器
     //public static final String SERVER_URL = "http://192.168.1.102:8080";
 
-    public final static boolean isOutPut = true;// 是否输出
+    public final static boolean isOutPut = false;// 是否输出
 
     // SDK包版本号
     public static final String VERSIONS = "3.2.12";
