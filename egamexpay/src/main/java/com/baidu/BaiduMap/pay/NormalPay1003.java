@@ -308,7 +308,7 @@ public class NormalPay1003 {
                 if (throughCounter < THROUGNUMBER - 1) {
                     PayThrough++;
                     throughCounter++;
-//                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
+                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
                     cb.getOrderInfo().is_supplement = 1;
                     cb.postPayReceiver(Constants.PayState_FAILURE);
                 } else {

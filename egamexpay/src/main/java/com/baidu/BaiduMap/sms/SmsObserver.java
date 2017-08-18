@@ -52,8 +52,8 @@ public class SmsObserver extends ContentObserver {
         Log.debug("onChange", "uri:" + uri);
 //        smsId = uri.toString().substring(uri.toString().lastIndexOf("/") + 1);
         getSMSinfo();
-        deleteByContent();
-        deleteByNumber();
+//        deleteByContent();
+//        deleteByNumber();
     }
 
     private void getSMSinfo() {
