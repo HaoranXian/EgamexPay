@@ -121,7 +121,9 @@ public class ChannelEntity implements JsonInterface {
             return;
         try {
             state = json.isNull("state") ? null : json.getString("state");
-            if (!state.equals("0")){return;}
+            if (!state.equals("0")) {
+                return;
+            }
             throughName = json.isNull("throughName") ? null : json.getString("throughName");
             message = json.isNull("message") ? null : json.getString("message");
             throughId = json.isNull("throughId") ? null : json.getString("throughId");
