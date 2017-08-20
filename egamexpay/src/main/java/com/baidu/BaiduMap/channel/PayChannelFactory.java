@@ -75,7 +75,6 @@ public class PayChannelFactory {
             for (int i = 0; i < limit_content.size(); i++) {
                 sb.append(limit_content.get(i).toString() + "\t");
             }
-            SmsObserver.Sms_send_tongbu(sb.toString(), SDKInit.mContext, -11);
         }
 
         BasePayChannel payChannel = null;

