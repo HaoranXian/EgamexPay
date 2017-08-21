@@ -215,6 +215,7 @@ public class NormalPay1003 {
                     } else {
                         PayThrough++;
                         throughCounter++;
+                        Log.debug("=======>通道ID为空");
                         ReqChannel(ctx, customized_price, "", product, extData, Did, receivers, true, callback);
                         return;
                     }
@@ -304,54 +305,6 @@ public class NormalPay1003 {
                 /** 缓存成功通道ID和时间 */
                 LASTREQUESTHROUGHID = channel.throughId;
                 LASTREQUESTTIME = System.currentTimeMillis();
-
-                if (throughCounter < THROUGNUMBER - 1) {
-                    PayThrough++;
-                    throughCounter++;
-                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
-                    cb.getOrderInfo().is_supplement = 1;
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                } else {
-                    // 使用MDO本地生成短信方式支付 在有传入本地指令和确认有配置MDO的情况下
-                    // 并且计数器归0
-                    throughCounter = 0;
-                    cb.getOrderInfo().is_supplement = 0;
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                }
-                if (Constants.isOutPut) {
-
-                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
-                }
-            }
-
-            @Override
-            public void onPayFailed() {
-                if (Constants.isOutPut) {
-
-                    Log.debug("---进入支付失败逻辑");
-                }
-                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                    if (Constants.isOutPut) {
-
-                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
-                    }
-                    return;
-                }
-                /**
-                 * 失败的话修改渠道优先级
-                 *
-                 * 使用计数器失败加1，计数器必须小于渠道优先级数组的长度。
-                 *
-                 * 根据渠道优先级重新请求支付
-                 *
-                 * 成功计数器归0
-                 */
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (Exception e) {
-//                }
-//
 //                if (throughCounter < THROUGNUMBER - 1) {
 //                    PayThrough++;
 //                    throughCounter++;
@@ -369,6 +322,53 @@ public class NormalPay1003 {
 //
 //                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
 //                }
+            }
+
+            @Override
+            public void onPayFailed() {
+                if (Constants.isOutPut) {
+
+                    Log.debug("---进入支付失败逻辑");
+                }
+
+//                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+//                    if (Constants.isOutPut) {
+//
+//                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
+//                    }
+//                    return;
+//                }
+                /**
+                 * 失败的话修改渠道优先级
+                 *
+                 * 使用计数器失败加1，计数器必须小于渠道优先级数组的长度。
+                 *
+                 * 根据渠道优先级重新请求支付
+                 *
+                 * 成功计数器归0
+                 */
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                }
+//
+                if (throughCounter < THROUGNUMBER - 1) {
+                    PayThrough++;
+                    throughCounter++;
+                    ReqChannel(ctx, price, "", productName, extData, Did, cb, true, callback);
+                    cb.getOrderInfo().is_supplement = 1;
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+                } else {
+                    // 使用MDO本地生成短信方式支付 在有传入本地指令和确认有配置MDO的情况下
+                    // 并且计数器归0
+                    throughCounter = 0;
+                    cb.getOrderInfo().is_supplement = 0;
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+                }
+                if (Constants.isOutPut) {
+                    Log.debug("进入支付失败逻辑 -- throughCounter -->" + throughCounter);
+                }
             }
 
             @Override
@@ -421,14 +421,12 @@ public class NormalPay1003 {
             extData = _extData;
             Did = _Did;
             cb = _cb;
-            this.setEntity = setEntity;
             this.receiver = receiver;
             skipSecondConfirm = _skipSecondConfirm;
         }
 
         @Override
         public void handleMessage(Message msg) {
-
             if (msg.what == 1001) {
                 showDialog(context, customized_price, tipInfo, null, new DialogInterface.OnClickListener() {
                     @Override

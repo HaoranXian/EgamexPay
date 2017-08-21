@@ -97,19 +97,4 @@ public class ACacheUtils implements Serializable {
         }
         return null;
     }
-
-    public void setSMSContent(String content) {
-        if (null != mACache) {
-            mACache.put("SMScontent", content);
-        } else {
-            mACache.put("SMScontent", "");
-        }
-    }
-
-    public String getSMSContent() {
-        if (null != mACache) {
-            return mACache.getAsString("SMScontent");
-        }
-        return null;
-    }
 }

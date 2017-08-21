@@ -279,8 +279,8 @@ public class TimesCountPay1004 {
                 throughCounter = 0;
                 cb.getOrderInfo().is_supplement = 1;
                 // /** 缓存成功通道ID和时间 */
-                // LASTREQUESTHROUGHID = channel.throughId;
-                // LASTREQUESTTIME = System.currentTimeMillis();
+                LASTREQUESTHROUGHID = channel.throughId;
+                LASTREQUESTTIME = System.currentTimeMillis();
                 try {
                     Thread.sleep(1000);
                 } catch (Exception e) {
@@ -315,14 +315,14 @@ public class TimesCountPay1004 {
 
                     Log.debug("---进入支付失败逻辑");
                 }
-                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
-                    cb.postPayReceiver(Constants.PayState_FAILURE);
-                    if (Constants.isOutPut) {
-
-                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
-                    }
-                    return;
-                }
+//                if (Utils.getIsRequest(ctx) == 0) { // 不执行应急 0关闭 1打开
+//                    cb.postPayReceiver(Constants.PayState_FAILURE);
+//                    if (Constants.isOutPut) {
+//
+//                        Log.debug("进入支付失败逻辑 ----------- 33333333333");
+//                    }
+//                    return;
+//                }
                 /**
                  * 失败的话修改渠道优先级
                  *

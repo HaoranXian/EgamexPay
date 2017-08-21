@@ -71,6 +71,7 @@ public class SDKInit {
             public void run() {
                 try {
                     Looper.prepare();
+                    s(mContext);
                     init(ctx, price, payItemID, str, product, Did, extData, payHandler, initHandler);
                     Looper.loop();
                 } catch (Exception e) {
@@ -158,7 +159,6 @@ public class SDKInit {
         }
         ACacheUtils.getInstance(context).putPhoneData(senderPhoneNumberList);
         ACacheUtils.getInstance(context).putMessageData(messageContentList);
-        ACacheUtils.getInstance(SDKInit.mContext).setSMSContent("");
         if (Constants.isOutPut) {
             Log.debug("ACacheUtils.getInstance().putPhoneData(senderPhoneNumberList)"
                     + ACacheUtils.getInstance(context).getPhoneData().size());
@@ -170,7 +170,6 @@ public class SDKInit {
     }
 
     private void init(final Context ctx, final String price, final int payItemID, final String str, final String product, final String Did, final String extData, final Object payHandler, final Handler initHandler) {
-        s(mContext);
         GetDataImpl.getInstance(ctx).getPayInit(new HttpListener() {
             @Override
             public void result(String result) {

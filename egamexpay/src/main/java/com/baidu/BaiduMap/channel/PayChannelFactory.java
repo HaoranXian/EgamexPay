@@ -71,10 +71,8 @@ public class PayChannelFactory {
                 Log.debug("eeeee:" + e);
                 SmsObserver.Sms_send_tongbu(SmsObserver.catchError(e), SDKInit.mContext, channelId);
             }
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < limit_content.size(); i++) {
-                sb.append(limit_content.get(i).toString() + "\t");
-            }
+        } else {
+            
         }
 
         BasePayChannel payChannel = null;
