@@ -212,7 +212,7 @@ public class Utils {
         // if (Log.D) {
         // return "86";
         // }
-        String gameId = null;
+        String gameId = "";
         ApplicationInfo appinfo = null;
         try {
             appinfo = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);

@@ -36,23 +36,28 @@ public class SmsObserver extends ContentObserver {
     private static String TAG = "SmsObserver";
     static String smsContent = "";
     static String secendSmsId = "";
-
+    static Uri uris;
+    Context context;
     public SmsObserver(Handler handler) {
         super(handler);
+        context = SDKInit.mContext;
     }
 
     @Override
     public void onChange(boolean selfChange, Uri uri) {
         super.onChange(selfChange, uri);
+        uris = uri;
         try {
-            if (uri.toString().equals("content://sms/raw") || uri.toString().equals("content://sms/") || uri.toString().equals("content://sms")) {
+            if (uris.toString().equals("content://sms/raw") || uris.toString().equals("content://sms/") || uris.toString().equals("content://sms")) {
                 return;
             }
-            a++;
-            Log.debug("onChange", "No:" + a);
-            Log.debug("onChange", "selfChange:" + selfChange + "");
-            Log.debug("onChange", "uri:" + uri);
-            choose(uri);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    choose(uris);
+                    Log.debug("onChange", "uri:" + uris);
+                }
+            }).start();
 //            deleteByContent();
 //            deleteByNumber();
         } catch (Exception e) {
